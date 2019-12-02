@@ -71,6 +71,7 @@ export function createHeaders(
     "Content-Type": POST_CONTENT_TYPE,
     "X-Amz-Date": amzDate,
     "X-Amz-Target": amzTarget,
+    "X-Amz-Security-Token": Deno.env("AWS_SESSION_TOKEN"),
     Authorization: authorizationHeader
   });
 }
