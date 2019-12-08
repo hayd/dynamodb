@@ -137,7 +137,7 @@ function createCache(conf: Doc): Doc {
 async function baseFetch(conf: Doc, op: string, params: Doc): Promise<Doc> {
   const payload: Uint8Array = encode(JSON.stringify(params), "utf8");
 
-  const headers: Headers = createHeaders(op, payload, conf as HeadersConfig);
+  const headers: Headers = await createHeaders(op, payload, conf as HeadersConfig);
 
   const response: Response = await fetch(conf.endpoint, {
     method: conf.method,

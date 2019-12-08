@@ -19,11 +19,11 @@ export interface HeadersConfig extends ClientConfig {
 }
 
 /** Assembles a header object for a DynamoDB request. */
-export function createHeaders(
+export async function createHeaders(
   op: string,
   payload: Uint8Array,
   conf: HeadersConfig
-): Headers {
+): Promise<Headers> {
   const amzTarget: string = `DynamoDB_20120810.${op}`;
 
   const amzDate: string = date.format(conf.date || new Date(), "amz");
@@ -67,11 +67,20 @@ export function createHeaders(
     conf.cache.credentialScope
   }, SignedHeaders=${signedHeaders}, Signature=${signature}`;
 
-  return new Headers({
+  const headers = new Headers({
     "Content-Type": POST_CONTENT_TYPE,
     "X-Amz-Date": amzDate,
     "X-Amz-Target": amzTarget,
-    "X-Amz-Security-Token": Deno.env("AWS_SESSION_TOKEN"),
     Authorization: authorizationHeader
   });
+
+  // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html
+  const securityToken = (await Deno.permissions.query({name: "env"})).state === "granted"
+    ? Deno.env("AWS_SESSION_TOKEN")
+    : undefined;
+  if (securityToken) {
+    headers.append("X-Amz-Security-Token", securityToken);
+  }
+
+  return headers
 }
