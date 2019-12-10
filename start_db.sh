@@ -7,7 +7,7 @@ DIR="./dynamodb_local_latest"
 
 if [[ ! -d $DIR ]]; then
   deno eval 'Deno.mkdir("$DIR")';
-  curl --progress-bar $URL | tar --directory=$DIR -zxf - 
+  curl --progress-bar $URL | tar --directory=$DIR -xf -
 fi
 
 java -D"java.library.path=$DIR/DynamoDBLocal_lib" -jar "$DIR/DynamoDBLocal.jar" -sharedDb &
