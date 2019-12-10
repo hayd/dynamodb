@@ -6,8 +6,8 @@ URL="https://s3.eu-central-1.amazonaws.com/dynamodb-local-frankfurt/dynamodb_loc
 DIR="./dynamodb_local_latest"
 
 if [[ ! -d $DIR ]]; then
-  deno eval 'Deno.mkdir("$DIR")';
-  curl --progress-bar $URL -o dynamodb_local_latest.tar.gz;
+  deno eval 'Deno.mkdir("$DIR")'
+  curl --progress-bar $URL -o dynamodb_local_latest.tar.gz
   tar -xzf dynamodb_local_latest.tar.gz
 fi
 
